@@ -1,0 +1,44 @@
+let items = JSON.parse(localStorage.getItem("shop_items")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveCart(){ localStorage.setItem("cart", JSON.stringify(cart)); }
+function renderItems(){
+    const c = document.getElementById("items-container");
+    c.innerHTML = items.map((i,idx)=>`
+        <div class='item'>
+            <img src="items/${i.image}">
+            <h3>${i.name}</h3>
+            <p>Rs ${i.price}</p>
+            <p>Stock: ${i.stock}</p>
+            <button onclick="addToCart(${idx})">Add</button>
+        </div>`).join("");
+}
+function addToCart(i){ if(items[i].stock>0){ cart.push(items[i]); items[i].stock--; saveCart(); localStorage.setItem("shop_items",JSON.stringify(items)); update(); }}
+function update(){ document.getElementById("cart-count").textContent=cart.length; renderItems(); renderCart(); }
+function renderCart(){
+    const c=document.getElementById("cart-items");
+    c.innerHTML = cart.map((i)=>`<p>${i.name} - Rs ${i.price}</p>`).join("");
+    let total = cart.reduce((a,b)=>a+b.price,0);
+    document.getElementById("cart-total").textContent=total;
+}
+
+document.getElementById("cart-btn").onclick=()=>{
+    document.getElementById("cart-panel").classList.remove("hidden");
+};
+document.getElementById("close-cart").onclick=()=>{
+    document.getElementById("cart-panel").classList.add("hidden");
+};
+
+document.getElementById("send-whatsapp").onclick=()=>{
+    let name=document.getElementById("cust-name").value;
+    let phone=document.getElementById("cust-phone").value;
+    let address=document.getElementById("cust-address").value;
+    let notes=document.getElementById("cust-notes").value;
+    let list = cart.map(i=>`- ${i.name} (Rs ${i.price})`).join("%0A");
+    let total = cart.reduce((a,b)=>a+b.price,0);
+
+    let msg = `New Order:%0AName: ${name}%0APhone: ${phone}%0AAddress: ${address}%0AItems:%0A${list}%0ATotal: Rs ${total}%0ANotes: ${notes}`;
+    window.open(`https://wa.me/94702828839${msg}`);
+};
+
+renderItems(); update();

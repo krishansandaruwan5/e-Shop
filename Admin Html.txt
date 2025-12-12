@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h2>Admin Login</h2>
+<input id="admin-pass" type="password" placeholder="Enter Password">
+<button onclick="login()">Login</button>
+
+<div id="panel" class="hidden">
+    <h2>Manage Items</h2>
+    <input id="name" placeholder="Item Name">
+    <input id="price" placeholder="Price" type="number">
+    <input id="stock" placeholder="Stock" type="number">
+    <input id="image" placeholder="Image filename.png">
+    <button onclick="addItem()">Add Item</button>
+    <hr>
+    <div id="item-list"></div>
+</div>
+<script src="admin.js"></script>
+</body>
+</html>

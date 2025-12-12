@@ -1,0 +1,6 @@
+let items = JSON.parse(localStorage.getItem("shop_items")) || [];
+function save(){ localStorage.setItem("shop_items", JSON.stringify(items)); }
+function login(){ if(document.getElementById("admin-pass").value==="1234"){ document.getElementById("panel").classList.remove("hidden"); render(); }}
+function addItem(){ let n=document.getElementById("name").value; let p=+document.getElementById("price").value; let s=+document.getElementById("stock").value; let img=document.getElementById("image").value; items.push({name:n,price:p,stock:s,image:img}); save(); render(); }
+function del(i){ items.splice(i,1); save(); render(); }
+function render(){ let d=document.getElementById("item-list"); d.innerHTML = items.map((x,i)=>`<p>${x.name} - Rs ${x.price} - Stock ${x.stock} <button onclick='del(${i})'>Delete</button></p>`).join(""); }
